@@ -15,12 +15,20 @@ async function initSettings(){
 }
 
 // **** Tab Functionality ****
+
+async function createTabsManifest(windowId) {
+    tabsManifest[windowId] = await chrome.tabs.queryAsync({windowId: windowId});
+}
+
 async function go(windowId) {
     const tab = await chrome.tabs.queryAsync({"windowId": windowId, "active": true});
     const tabSetting = await grabTabSettings(windowId, tab[0]);
     setMoverTimeout(windowId, tabSetting.seconds);
     windowStatus[windowId] = "on";
     badgeTabs('on', windowId);
+    await chrome.tabs.createAsync({windowId: windowId, index: 0});
+    await chrome.tabs.removeAsync(tabsManifest[windowId][tabIndex].id);
+    windowStatus[windowId] = "on";
 }
 
 async function stop(windowId) {
@@ -214,7 +222,7 @@ function stop(windowId) {
 
 // **** Event Listeners ****
 function addEventListeners() {
-    chrome.browserAction.onClicked.addListener(async function(tab) {
+    chrome.browserAction.onClicked.addListener(async function (tab) {
         const windowId = tab.windowId;
         if (windowStatus[windowId] == "on" || windowStatus[windowId] == "pause") {
             stop(windowId);
@@ -266,16 +274,31 @@ async function badgeTabs(status, windowId) {
 
 // **** Execution ****
 
-// Create promise-based versions of Chrome API functions
+function promisify(func) {
+    return function (...args) {
+        return new Promise((resolve, reject) => {
+            func(...args, (result) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(result);
+            });
+        });
+    };
+}
+
+chrome.tabs.getAsync = promisify(chrome.tabs.get);
 chrome.tabs.queryAsync = promisify(chrome.tabs.query);
 chrome.tabs.removeAsync = promisify(chrome.tabs.remove);
 chrome.tabs.createAsync = promisify(chrome.tabs.create);
+    
+    
 
 // Set event listeners
 addEventListeners();
 
 // Initialize
-chrome.tabs.onActivated.addListener(function(activeInfo) {
+chrome.tabs.onActivated.addListener(function (activeInfo) {
     chrome.tabs.getAsync(activeInfo.tabId).then(setBadgeStatusOnActiveWindow);
 });
 
