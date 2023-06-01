@@ -273,7 +273,6 @@ async function badgeTabs(status, windowId) {
 }
 
 // **** Execution ****
-
 function promisify(func) {
     return function (...args) {
         return new Promise((resolve, reject) => {
@@ -282,6 +281,7 @@ function promisify(func) {
                     reject(chrome.runtime.lastError);
                 } else {
                     resolve(result);
+                }
             });
         });
     };
