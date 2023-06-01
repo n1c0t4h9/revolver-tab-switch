@@ -5,7 +5,7 @@
       "default_icon": "revolver_t_19.png",
       "default_title": "Revolver - Tabs - Automatically rotate through open tabs."
    },
-   "description": "Automatically rotate through open tabs. By Ben Hedrington",
+   "description": "Automatically rotate through open tabs",
    "icons": {
       "128": "revolver_t_128.png",
       "48": "revolver_t_48.png"
