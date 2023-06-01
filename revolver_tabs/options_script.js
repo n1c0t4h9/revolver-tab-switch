@@ -59,8 +59,7 @@ const saveBaseOptions = async () => {
   localStorage["revolverSettings"] = JSON.stringify(appSettings);
 }
 
-/* Section 3: Advanced Options */
-// Advanced options code
+// Section 3: Advanced Options
 const saveAdvancedOptions = async () => {
   const advancedSettings = document.getElementById("adv-settings");
   const advancedDivs = advancedSettings.getElementsByTagName("div");
@@ -87,7 +86,7 @@ const saveAdvancedOptions = async () => {
 
 const restoreAdvancedOptions = () => {
   const settings = JSON.parse(localStorage["revolverAdvSettings"]);
-  if(settings.length>0){
+  if (settings.length > 0) {
     settings.forEach(setting => generateAdvancedSettingsHtml(setting, true));
   }
 }
