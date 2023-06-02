@@ -59,7 +59,8 @@ const saveBaseOptions = async () => {
   localStorage["revolverSettings"] = JSON.stringify(appSettings);
 }
 
-// Section 3: Advanced Options
+/* Section 3: Advanced Options */
+// Advanced options code
 const saveAdvancedOptions = async () => {
   const advancedSettings = document.getElementById("adv-settings");
   const advancedDivs = advancedSettings.getElementsByTagName("div");
@@ -78,6 +79,7 @@ const saveAdvancedOptions = async () => {
   }
 
   localStorage["revolverAdvSettings"] = JSON.stringify(advUrlObjectArray);
+  const bg = chrome.runtime.getBackgroundPage();
   bg.updateSettings();
 
   document.getElementById("status3").innerHTML = "OPTIONS SAVED";
@@ -86,7 +88,7 @@ const saveAdvancedOptions = async () => {
 
 const restoreAdvancedOptions = () => {
   const settings = JSON.parse(localStorage["revolverAdvSettings"]);
-  if (settings.length > 0) {
+  if(settings.length>0){
     settings.forEach(setting => generateAdvancedSettingsHtml(setting, true));
   }
 }
