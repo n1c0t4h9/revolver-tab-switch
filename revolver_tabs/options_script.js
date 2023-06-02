@@ -61,7 +61,7 @@ const saveBaseOptions = async () => {
 
 /* Section 3: Advanced Options */
 // Advanced options code
-const saveAdvancedOptions = async () => {
+const saveAdvancedOptions = () => {
   const advancedSettings = document.getElementById("adv-settings");
   const advancedDivs = advancedSettings.getElementsByTagName("div");
   const advUrlObjectArray = [];
@@ -79,11 +79,13 @@ const saveAdvancedOptions = async () => {
   }
 
   localStorage["revolverAdvSettings"] = JSON.stringify(advUrlObjectArray);
-  const bg = chrome.runtime.getBackgroundPage();
-  bg.updateSettings();
+  
+  chrome.runtime.getBackgroundPage((bg) => {
+    bg.updateSettings();
 
-  document.getElementById("status3").innerHTML = "OPTIONS SAVED";
-  setTimeout(() => document.getElementById("status3").innerHTML = "", 1000);
+    document.getElementById("status3").innerHTML = "OPTIONS SAVED";
+    setTimeout(() => document.getElementById("status3").innerHTML = "", 1000);
+  });
 }
 
 const restoreAdvancedOptions = () => {
