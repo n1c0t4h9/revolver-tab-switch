@@ -174,7 +174,23 @@ async function grabTabSettings(windowId, tab){
     }
 }
 
+// **** Timeout Functionality ****
+
+function setMoverTimeout(windowId, tabTimeout) {
+    if(moverTimeOut[windowId]){
+        clearTimeout(moverTimeOut[windowId]);
+    }
+    moverTimeOut[windowId] = setTimeout(function(){ moveTabIfIdle(windowId, tabTimeout); }, tabTimeout * 1000);
+}
+
+function removeTimeout(windowId) {
+    if(moverTimeOut[windowId]) {
+        clearTimeout(moverTimeOut[windowId]);
+    }
+}
+
 // **** Tab Functionality ****
+
 async function refreshTab(tabId) {
     const tab = await chrome.tabs.getAsync(tabId);
     const url = new URL(tab.url);
