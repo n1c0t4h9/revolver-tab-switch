@@ -1,5 +1,5 @@
 {
-   "manifest_version": 2,
+   "manifest_version": 3,
    "background": { "page": "bg.html" },
    "browser_action": {
       "default_icon": "revolver_t_19.png",
