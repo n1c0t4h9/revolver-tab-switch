@@ -273,6 +273,7 @@ async function badgeTabs(status, windowId) {
 }
 
 // **** Execution ****
+
 function promisify(func) {
     return function (...args) {
         return new Promise((resolve, reject) => {
@@ -287,18 +288,25 @@ function promisify(func) {
     };
 }
 
-chrome.tabs.getAsync = promisify(chrome.tabs.get);
+// Create promise-based versions of Chrome API functions
 chrome.tabs.queryAsync = promisify(chrome.tabs.query);
 chrome.tabs.removeAsync = promisify(chrome.tabs.remove);
 chrome.tabs.createAsync = promisify(chrome.tabs.create);
-    
-    
+
+// Add the promisify get method for tabs
+chrome.tabs.getAsync = promisify(chrome.tabs.get);
 
 // Set event listeners
 addEventListeners();
 
+function updateSettings() {
+    settings = JSON.parse(localStorage.getItem('revolverSettings'));
+    advancedSettings = JSON.parse(localStorage.getItem('revolverAdvSettings'));
+}
+window.updateSettings = updateSettings; // Expose it to the global scope
+
 // Initialize
-chrome.tabs.onActivated.addListener(function (activeInfo) {
+chrome.tabs.onActivated.addListener(function(activeInfo) {
     chrome.tabs.getAsync(activeInfo.tabId).then(setBadgeStatusOnActiveWindow);
 });
 
